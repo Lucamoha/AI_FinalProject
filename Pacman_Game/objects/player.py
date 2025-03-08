@@ -41,6 +41,6 @@ class Player:
         self.rect.top += dx
         self.rect.left += dy
 
-    def touch_New_RC(self, row, col):
+    def touch_New_RC(self, row : int, col : int):
         '''Kiểm tra vị trí hiện tại có trùng vị trí row, col đang xét'''
         return self.rect.top == row * SIZE_WALL and self.rect.left == col * SIZE_WALL
