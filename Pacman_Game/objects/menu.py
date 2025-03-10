@@ -127,14 +127,14 @@ class Menu:
                     pg.draw.ellipse(image, YELLOW, [0, 0, sizeCell // 2, sizeCell // 2])
                     self.screen.blit(image, (x + sizeCell // 4, y + sizeCell // 4))
                 elif cell == MONSTER:
-                    image = pg.image.load(IMAGE_GHOST[count_ghost]).convert_alpha()
+                    image = pg.image.load(IMAGE_GHOST_PATH[count_ghost]).convert_alpha()
                     image = pg.transform.scale(image, (sizeCell, sizeCell))
                     self.screen.blit(image, (x, y))
-                    count_ghost = (count_ghost + 1) % len(IMAGE_GHOST)
+                    count_ghost = (count_ghost + 1) % len(IMAGE_GHOST_PATH)
 
             player_Y = int(map[len(map) - 1].split()[0])
             player_X = int(map[len(map) - 1].split()[1])
-            image = pg.image.load(IMAGE_PACMAN[0]).convert_alpha()
+            image = pg.image.load(IMAGE_PLAYER_PATH[0]).convert_alpha()
             image = pg.transform.scale(image, (sizeCell, sizeCell))
 
             x = player_X * sizeCell + map_X
