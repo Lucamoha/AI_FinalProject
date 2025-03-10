@@ -51,10 +51,9 @@ class Menu:
         self.isDone = False
         self.clicked = False
         self.listMap = []
-        self.currentMapPath = f"levels\Level1\map1.txt"
 
         self.currentPage = 0
-        self.Level = 0
+        self.Level = 1
         self.Map = 1
         self.Algo = ""
         
@@ -182,7 +181,6 @@ class Menu:
         if self.clicked:
             self.Map = self.Map % len(self.listMap) + 1
         
-        self.currentMapPath = f"levels\Level{self.Level}\map{self.Map}.txt"
         self.clicked = False
 
     def _prevMap(self):
@@ -191,7 +189,6 @@ class Menu:
             if self.Map == 0:
                 self.Map += len(self.listMap)
         
-        self.currentMapPath = f"levels\Level{self.Level}\map{self.Map}.txt"
         self.clicked = False
     
     def _BFS(self):
@@ -216,6 +213,7 @@ class Menu:
                 self.btChooseLevel.animation()
             elif self.currentPage == 1:
                 self.screen.blit(background, (0, 0))
+                self.Map = 1
                 self.btBack.animation()
                 self.btLevel_01.animation()
                 self.btLevel_02.animation()
@@ -223,7 +221,7 @@ class Menu:
                 self.btLevel_04.animation()
             elif self.currentPage == 2:
                 self.screen.blit(background, (0, 0))
-                self._drawMap(self.currentMapPath)
+                self._drawMap(f"levels/Level{self.Level}/map{self.Map}.txt")
                 self.btBack.animation()
                 self.btPrevMap.animation()
                 self.btNextMap.animation()
