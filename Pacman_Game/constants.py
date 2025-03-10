@@ -1,3 +1,5 @@
+import pygame as pg
+
 # DEFINE COLOR
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -19,10 +21,16 @@ WALL = 1
 FOOD = 2
 MONSTER = 3
 
+# Direction 
+RIGHT = 0
+LEFT = 1
+UP = 2
+DOWN = 3
+
 # Setup screen
 WIDTH: int = 1200
 HEIGHT: int = 600
-FPS: int = 300
+FPS: int = 60
 
 MARGIN = {
     "TOP": 0, # "TOP": Xác định khoảng cách từ mép trên của cửa sổ đến khu vực chơi.
@@ -30,5 +38,9 @@ MARGIN = {
 }
 
 # IMAGE
-IMAGE_GHOST = ["assets/ghost_images/blue.png", "assets/ghost_images/dead.png", "assets/ghost_images/orange.png", "assets/ghost_images/pink.png", "assets/ghost_images/powerup.png", "assets/ghost_images/red.png"]
-IMAGE_PACMAN = ["assets/player_images/1.png", "assets/player_images/2.png", "assets/player_images/3.png", "assets/player_images/4.png"]
+IMAGE_GHOST_PATH = ["assets/ghost_images/blue.png", "assets/ghost_images/dead.png", "assets/ghost_images/orange.png", "assets/ghost_images/pink.png", "assets/ghost_images/powerup.png", "assets/ghost_images/red.png"]
+IMAGE_PLAYER_PATH = ["assets/player_images/1.png", "assets/player_images/2.png", "assets/player_images/3.png", "assets/player_images/4.png"]
+IMAGE_GHOST = []
+IMAGE_PLAYER = []
+for image_path in IMAGE_PLAYER_PATH:
+    IMAGE_PLAYER.append(pg.transform.scale(pg.image.load(image_path), (SIZE_WALL, SIZE_WALL)))
