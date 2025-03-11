@@ -1,6 +1,7 @@
 import pygame as pg
 from constants import *
 import os
+import sys
 
 pg.init()
 font = pg.font.SysFont('Arial', 40)
@@ -205,6 +206,7 @@ class Menu:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
+                    sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     self.clicked = True
 
