@@ -27,5 +27,5 @@ class Food:
     def check_food(self, player_rect): 
         return self.rect.colliderect(player_rect)
     
-    def getPos(self):
+    def get_RC(self):
         return self.row, self.col

@@ -1,4 +1,6 @@
 import pygame as pg
+import time
+
 from constants import *
 from objects.menu import Menu
 from objects.food import Food
@@ -6,6 +8,7 @@ from objects.player import Player
 from objects.ghost import Ghost
 from Algorithms.BFS import BFS
 from Algorithms.DFS import DFS
+
 
 level = 1
 map = 1     # STT map
@@ -21,6 +24,8 @@ player = Player(0, 0, 0)
 totalStep = 0
 totalFood = 0
 counter = 0
+totalTime = 0
+
 
 pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -29,6 +34,9 @@ clock = pg.time.Clock()
 
 def initMap(fileMap):
     '''Khởi tạo map, các list đối tượng từ fileMap sau khi người dùng hoàn thành Menu'''
+    global totalTime
+    totalTime = 0
+
     with open(fileMap, 'r') as file:
         _map = file.readlines()
 
@@ -58,6 +66,20 @@ def initMap(fileMap):
     player_X = int(_map[len(_map) - 1].split()[0])
     player_Y = int(_map[len(_map) - 1].split()[1])
     player.set_RC(player_X, player_Y)
+
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        global totalTime
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        elapsed_time = end - start
+        totalTime += elapsed_time
+        return result
+    return wrapper
+BFS = timer(BFS)
+DFS = timer(DFS)
 
 
 def drawMap():
@@ -99,7 +121,7 @@ def showMenu():
 
 
 def main():
-    global level, map, algo, totalStep, totalFood
+    global level, map, algo, totalStep, totalFood, totalTime
     global screen, foodList, ghostList, wallPos
     
     totalStep = 0
@@ -118,9 +140,9 @@ def main():
         clock.tick(6)
         
         if algo == "BFS":
-            playerPath, alive = BFS(player.get_RC(), [food.getPos() for food in foodList], [ghost.getPos() for ghost in ghostList], wallPos)
+            playerPath, alive = BFS(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
         elif algo == "DFS":
-            playerPath, alive = DFS(player.get_RC(), [food.getPos() for food in foodList], [ghost.getPos() for ghost in ghostList], wallPos)
+            playerPath, alive = DFS(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
 
         # if level == 3:
         #     ghostPath = GhostMove()
@@ -130,19 +152,19 @@ def main():
         
         totalStep += 1
         for food in foodList:
-            if player.get_RC() == food.getPos():
+            if player.get_RC() == food.get_RC():
                 totalFood += 1
                 foodList.remove(food)
                 break
         
-        if not alive:
-            print(f"Pacman bị bắt sau {totalStep} bước, ăn {totalFood} quả.")
-            running = False
-            break
-
-        if not foodList:
-            print(f"Pacman đã ăn hết {totalFood} thức ăn sau {totalStep} bước!")
-            running = False
+        if not alive or not foodList:
+            title = f"--Level: {level} - Map: {map} - Algo: {algo}--"
+            print(title)
+            print(f"Status: {"Die" if not alive else "Win"}")
+            print(f"Steps: {totalStep}")
+            print(f"Food: {totalFood}")
+            print(f"Time: {totalTime}")
+            print('-' * len(title))
             break
     
     showMenu()
