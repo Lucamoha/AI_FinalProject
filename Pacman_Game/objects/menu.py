@@ -118,7 +118,8 @@ class Menu:
 
                 if cell == WALL:
                     image = pg.Surface([sizeCell, sizeCell], pg.SRCALPHA)
-                    pg.draw.rect(image, BLUE, (0, 0, sizeCell, sizeCell))
+                    pg.draw.rect(image, (0, 0, 128), (0, 0, sizeCell, sizeCell))
+                    pg.draw.rect(image, (0, 255, 255), (0, 0, sizeCell, sizeCell), 1)
                     self.screen.blit(image, (x, y))
                 elif cell == FOOD:
                     image = pg.Surface([sizeCell // 2, sizeCell // 2])
@@ -126,7 +127,7 @@ class Menu:
                     image.set_colorkey(WHITE)
                     pg.draw.ellipse(image, YELLOW, [0, 0, sizeCell // 2, sizeCell // 2])
                     self.screen.blit(image, (x + sizeCell // 4, y + sizeCell // 4))
-                elif cell == MONSTER:
+                elif cell == GHOST:
                     image = pg.image.load(IMAGE_GHOST_PATH[count_ghost]).convert_alpha()
                     image = pg.transform.scale(image, (sizeCell, sizeCell))
                     self.screen.blit(image, (x, y))

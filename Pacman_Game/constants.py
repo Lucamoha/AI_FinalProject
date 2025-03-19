@@ -14,12 +14,13 @@ ORANGE = (255, 165, 0)
 SIZE_WALL: int = 30
 DEFINE_WIDTH: int = 6
 BLOCK_SIZE: int = SIZE_WALL // 2
+MOVES = [(0, 1), (0, -1), (-1, 0), (1, 0)]
 
 # Entity
 EMPTY = 0
 WALL = 1
 FOOD = 2
-MONSTER = 3
+GHOST = 3
 
 # Direction 
 RIGHT = 0
