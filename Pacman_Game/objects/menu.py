@@ -38,6 +38,7 @@ class Button:
             if pg.mouse.get_pressed()[0]:
                 self.buttonSurface.fill(self.fillColors['pressed'])
                 self.function()
+                return True
 
         self.buttonSurface.blit(self.buttonTextSurface, [
             self.buttonRect.width / 2 - self.buttonTextSurface.get_rect().width / 2,
