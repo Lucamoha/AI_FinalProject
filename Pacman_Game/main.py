@@ -1,8 +1,9 @@
 import pygame as pg
 import time
+import sys
 
 from constants import *
-from objects.menu import Menu
+from objects.menu import Menu, Button
 from objects.food import Food
 from objects.player import Player
 from objects.ghost import Ghost
@@ -111,6 +112,50 @@ def drawMap():
             player.move()
 
 
+def showEndPage(alive = True):
+    global screen, level, map, algo, totalStep, totalFood, totalTime
+    title = f"--Level: {level} - Map: {map} - Algo: {algo}--"
+    print(title)
+    print(f"Status: {"Lose" if not alive else "Win"}")
+    print(f"Steps: {totalStep}")
+    print(f"Food: {totalFood}")
+    print(f"Score: {totalStep * (-1) + totalFood * 10}")
+    print(f"Time: {totalTime}s")
+    print('-' * len(title))
+
+    btContinue = Button(300, HEIGHT // 2 + 150, 200, 60, screen, "Continue", showMenu)
+    btExit = Button(WIDTH - 300 - 200, HEIGHT // 2 + 150, 200, 60, screen, "Exit", lambda: (pg.quit(), sys.exit()))
+
+    screen.fill(BLACK)
+    screen.blit(pg.image.load('assets/background.jpg'), (0, 0))
+    pg.display.flip() 
+
+    StatusTextSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{"LOSE" if not alive else "WIN"}", True, (255, 215, 0))
+    textWidth = StatusTextSurface.get_size()[0]
+    shadowSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{"LOSE" if not alive else "WIN"}", True, BLACK)
+    screen.blit(shadowSurface, (WIDTH // 2 - textWidth // 2 + 2, 52))
+    screen.blit(StatusTextSurface, (WIDTH // 2 - textWidth // 2, 50))
+
+    ScoreTextSurface = pg.font.SysFont('Arial', 60, bold=True).render(f"Score: {totalStep * (-1) + totalFood * 10}", True, RED)
+    textWidth = ScoreTextSurface.get_size()[0]
+    ScoreTextSurfaceShadow = pg.font.SysFont('Arial', 60, bold=True).render(f"Score: {totalStep * (-1) + totalFood * 10}", True, BLACK)
+    screen.blit(ScoreTextSurfaceShadow, (WIDTH // 2 - textWidth // 2 + 2, 252))
+    screen.blit(ScoreTextSurface, (WIDTH // 2 - textWidth // 2, 250))
+
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+        
+        if btContinue.animation():
+            return
+        
+        btExit.animation()
+
+        pg.display.flip()
+
+
 def showMenu():
     global level, map, algo, screen
     menu = Menu(screen)
@@ -127,6 +172,15 @@ def main():
     totalStep = 0
     totalFood = 0
     running = True
+
+    if algo == "BFS":
+        algoFunc = BFS
+    elif algo == "DFS":
+        algoFunc = DFS
+
+    if level == 1 or level == 2:
+        playerPath, alive = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+
     while running:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -139,10 +193,10 @@ def main():
         pg.display.flip()
         clock.tick(6)
         
-        if algo == "BFS":
-            playerPath, alive = BFS(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
-        elif algo == "DFS":
-            playerPath, alive = DFS(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+        if not (level == 1 or level == 2):
+            playerPath, alive = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+        else:
+            playerPath.pop(0)
 
         # if level == 3:
         #     ghostPath = GhostMove()
@@ -158,13 +212,7 @@ def main():
                 break
         
         if not alive or not foodList:
-            title = f"--Level: {level} - Map: {map} - Algo: {algo}--"
-            print(title)
-            print(f"Status: {"Die" if not alive else "Win"}")
-            print(f"Steps: {totalStep}")
-            print(f"Food: {totalFood}")
-            print(f"Time: {totalTime}")
-            print('-' * len(title))
+            showEndPage(alive)
             break
     
     showMenu()
