@@ -19,6 +19,8 @@ class Ghost:
     def set_RC(self, newRow, newCol):
         self.row = newRow
         self.col = newCol
-
+        self.x = self.col * SIZE_WALL + MARGIN["LEFT"]
+        self.y = self.row * SIZE_WALL + MARGIN["TOP"]
+        
     def get_RC(self):
         return self.row, self.col
