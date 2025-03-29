@@ -9,6 +9,7 @@ from objects.player import Player
 from objects.ghost import Ghost
 from Algorithms.BFS import BFS
 from Algorithms.DFS import DFS
+from Algorithms.Ghost_move import A_star, random_move
 
 
 level = 1
@@ -116,7 +117,7 @@ def showEndPage(alive = True):
     global screen, level, map, algo, totalStep, totalFood, totalTime
     title = f"--Level: {level} - Map: {map} - Algo: {algo}--"
     print(title)
-    print(f"Status: {"Lose" if not alive else "Win"}")
+    print(f"Status: {'Lose' if not alive else 'Win'}")
     print(f"Steps: {totalStep}")
     print(f"Food: {totalFood}")
     print(f"Score: {totalStep * (-1) + totalFood * 10}")
@@ -130,9 +131,9 @@ def showEndPage(alive = True):
     screen.blit(pg.image.load('assets/background.jpg'), (0, 0))
     pg.display.flip() 
 
-    StatusTextSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{"LOSE" if not alive else "WIN"}", True, (255, 215, 0))
+    StatusTextSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{'LOSE' if not alive else 'WIN'}", True, (255, 215, 0))
     textWidth = StatusTextSurface.get_size()[0]
-    shadowSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{"LOSE" if not alive else "WIN"}", True, BLACK)
+    shadowSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{'LOSE' if not alive else 'WIN'}", True, BLACK)
     screen.blit(shadowSurface, (WIDTH // 2 - textWidth // 2 + 2, 52))
     screen.blit(StatusTextSurface, (WIDTH // 2 - textWidth // 2, 50))
 
@@ -198,9 +199,22 @@ def main():
         else:
             playerPath.pop(0)
 
-        # if level == 3:
-        #     ghostPath = GhostMove()
+        if level == 3:
+            for ghost in ghostList:
+                current_pos = ghost.get_RC()
+                new_pos = random_move(current_pos, wallPos)
+                if new_pos:
+                    ghost.set_RC(new_pos[0], new_pos[1])
 
+        if level == 4:
+            for ghost in ghostList:
+                current_pos = ghost.get_RC()
+                pacman_pos = player.get_RC()
+                ghost_path = A_star(current_pos, pacman_pos, wallPos)
+                if ghost_path and len(ghost_path) > 1: 
+                    next_pos = ghost_path[1]
+                    ghost.set_RC(next_pos[0], next_pos[1])
+    
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
         
