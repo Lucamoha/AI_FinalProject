@@ -2,7 +2,7 @@ import pygame as pg
 from constants import *
 
 class Player:
-    def __init__(self, row: int, col: int, score: int):
+    def __init__(self, row: int, col: int):
         self.image_list = IMAGE_PLAYER
         self.image = self.image_list[0]
         self.rect = self.image.get_rect()
@@ -14,8 +14,6 @@ class Player:
         self.col = col
         self.direction = RIGHT  # Hướng mặc định
 
-        self.score = score
-
     def set_RC(self, row: int, col: int):
         '''Cập nhật vị trí theo ô lưới'''
         for i in range(len(MOVES)):
@@ -24,8 +22,10 @@ class Player:
                 break
         self.row = row
         self.col = col
-        self.rect.top = row * SIZE_WALL + MARGIN["TOP"]
-        self.rect.left = col * SIZE_WALL + MARGIN["LEFT"]
+    
+    def set_rect(self):
+        self.rect.top = self.row * SIZE_WALL + MARGIN["TOP"]
+        self.rect.left = self.col * SIZE_WALL + MARGIN["LEFT"]
 
     def get_RC(self):
         return self.row, self.col

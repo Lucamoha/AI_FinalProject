@@ -63,14 +63,11 @@ class Menu:
 
         self.btBack = Button(20, 20, 100, 50, screen, "<<", self._backPage)
 
-        level_start_x_1 = WIDTH // 3 - 100
-        level_start_x_2 = (WIDTH // 3) * 2 - 100
-        level_y_1 = HEIGHT // 3 - 50
-        level_y_2 = (HEIGHT // 3) * 2 - 50 
-        self.btLevel_01 = Button(level_start_x_1, level_y_1, 200, 100, screen, "Level 1", self._loadMapLv1)
-        self.btLevel_02 = Button(level_start_x_1, level_y_2, 200, 100, screen, "Level 2", self._loadMapLv2)
-        self.btLevel_03 = Button(level_start_x_2, level_y_1, 200, 100, screen, "Level 3", self._loadMapLv3)
-        self.btLevel_04 = Button(level_start_x_2, level_y_2, 200, 100, screen, "Level 4", self._loadMapLv4)
+        self.btLevel_01 = Button(150, 200, 200, 100, screen, "Level 1", self._loadMapLv1)
+        self.btLevel_02 = Button(500, 200, 200, 100, screen, "Level 2", self._loadMapLv2)
+        self.btLevel_03 = Button(850, 200, 200, 100, screen, "Level 3", self._loadMapLv3)
+        self.btLevel_04 = Button(325, 350, 200, 100, screen, "Level 4", self._loadMapLv4)
+        self.btLevel_05 = Button(675, 350, 200, 100, screen, "Level 5", self._loadMapLv5)
 
         self.btPrevMap = Button(40, HEIGHT - 40 - 50, 100, 50, screen, "<", self._prevMap)
         self.btNextMap = Button(WIDTH - 100 - 40, HEIGHT - 40 - 50, 100, 50, screen, ">", self._nextMap)
@@ -180,6 +177,15 @@ class Menu:
             self._nextPage()
         self.clicked = False
 
+    def _loadMapLv5(self):
+        if self.clicked:
+            self.Level = 5
+            self.listMap = []
+            for file in os.listdir('levels/Level5'):
+                self.listMap.append('levels/Level5/' + file)
+            self._nextPage()
+        self.clicked = False
+
     def _nextMap(self):
         if self.clicked:
             self.Map = self.Map % len(self.listMap) + 1
@@ -223,6 +229,7 @@ class Menu:
                 self.btLevel_02.animation()
                 self.btLevel_03.animation()
                 self.btLevel_04.animation()
+                self.btLevel_05.animation()
             elif self.currentPage == 2:
                 self.screen.blit(background, (0, 0))
                 self._drawMap(f"levels/Level{self.Level}/map{self.Map}.txt")

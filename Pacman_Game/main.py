@@ -22,11 +22,12 @@ wallPos = []
 foodList = []
 ghostList = []
 
-player = Player(0, 0, 0)
+player = Player(0, 0)
 totalStep = 0
 totalFood = 0
 counter = 0
 totalTime = 0
+isMoving = False
 
 
 pg.init()
@@ -36,8 +37,9 @@ clock = pg.time.Clock()
 
 def initMap(fileMap):
     '''Khởi tạo map, các list đối tượng từ fileMap sau khi người dùng hoàn thành Menu'''
-    global totalTime
+    global totalTime, isMoving
     totalTime = 0
+    isMoving = False
 
     with open(fileMap, 'r') as file:
         _map = file.readlines()
@@ -68,6 +70,7 @@ def initMap(fileMap):
     player_X = int(_map[len(_map) - 1].split()[0])
     player_Y = int(_map[len(_map) - 1].split()[1])
     player.set_RC(player_X, player_Y)
+    player.set_rect()
 
 
 def timer(func):
@@ -84,33 +87,61 @@ BFS = timer(BFS)
 DFS = timer(DFS)
 
 
-def drawMap():
+def draw():
     global wallPos, screen, foodList, ghostList, counter
 
-    while True:
-        screen.fill(BLACK)
+    screen.fill(BLACK)
+    player.draw(screen, counter)
 
-        counter += 1
-        player.draw(screen, counter)
+    for i, j in wallPos:
+        wallSurface = pg.Surface([SIZE_WALL, SIZE_WALL], pg.SRCALPHA)
+        pg.draw.rect(wallSurface, (0, 0, 128), (0, 0, SIZE_WALL, SIZE_WALL))
+        pg.draw.rect(wallSurface, (0, 255, 255), (0, 0, SIZE_WALL, SIZE_WALL), 1)
+        screen.blit(wallSurface, (j * SIZE_WALL + MARGIN["LEFT"], i * SIZE_WALL + MARGIN["TOP"]))
 
-        for i, j in wallPos:
-            wallSurface = pg.Surface([SIZE_WALL, SIZE_WALL], pg.SRCALPHA)
-            pg.draw.rect(wallSurface, (0, 0, 128), (0, 0, SIZE_WALL, SIZE_WALL))
-            pg.draw.rect(wallSurface, (0, 255, 255), (0, 0, SIZE_WALL, SIZE_WALL), 1)
-            screen.blit(wallSurface, (j * SIZE_WALL + MARGIN["LEFT"], i * SIZE_WALL + MARGIN["TOP"]))
+    for food in foodList:
+        food.draw(screen)
+    
+    for ghost in ghostList:
+        ghost.draw(screen)
 
-        for food in foodList:
-            food.draw(screen)
-        
-        for ghost in ghostList:
-            ghost.draw(screen)
-        
+
+def drawMap():
+    global isMoving, counter, ghostList, level
+
+    if not isMoving:
+        draw()
         pg.display.flip()
+        return
+    
+    i = 1
+    while not player.reached_target():
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    return showMenu()
 
-        if player.reached_target():
-            break
-        else:
+        if i % 5 == 0:
             player.move()
+            if level > 2:
+                for ghost in ghostList:
+                    ghost.move()
+            
+            draw()
+
+        if i % 10 == 0:
+            counter += 1
+
+        pg.display.flip()
+        clock.tick(FPS)
+        i += 1
+    
+    for ghost in ghostList:
+        ghost.set_rect()
+    isMoving = False 
 
 
 def showEndPage(alive = True):
@@ -143,6 +174,7 @@ def showEndPage(alive = True):
     screen.blit(ScoreTextSurfaceShadow, (WIDTH // 2 - textWidth // 2 + 2, 252))
     screen.blit(ScoreTextSurface, (WIDTH // 2 - textWidth // 2, 250))
 
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -157,6 +189,16 @@ def showEndPage(alive = True):
         pg.display.flip()
 
 
+def checkCollision():
+    global ghostList, player
+
+    for ghost in ghostList:
+        if ghost.get_RC() == player.get_RC():
+            return False
+    
+    return True
+
+
 def showMenu():
     global level, map, algo, screen
     menu = Menu(screen)
@@ -167,12 +209,14 @@ def showMenu():
 
 
 def main():
-    global level, map, algo, totalStep, totalFood, totalTime
+    global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter
     global screen, foodList, ghostList, wallPos
     
     totalStep = 0
     totalFood = 0
     running = True
+    alive = True
+    counter = 0
 
     if algo == "BFS":
         algoFunc = BFS
@@ -180,43 +224,34 @@ def main():
         algoFunc = DFS
 
     if level == 1 or level == 2:
-        playerPath, alive = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+        playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
 
     while running:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                return
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    return showMenu()
-        
         drawMap()
-        pg.display.flip()
-        clock.tick(6)
         
         if not (level == 1 or level == 2):
-            playerPath, alive = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
-        else:
-            playerPath.pop(0)
-
-        if level == 3:
-            for ghost in ghostList:
-                current_pos = ghost.get_RC()
-                new_pos = random_move(current_pos, wallPos)
-                if new_pos:
-                    ghost.set_RC(new_pos[0], new_pos[1])
-
-        if level == 4:
             for ghost in ghostList:
                 current_pos = ghost.get_RC()
                 pacman_pos = player.get_RC()
-                ghost_path = A_star(current_pos, pacman_pos, wallPos)
-                if ghost_path and len(ghost_path) > 1: 
-                    next_pos = ghost_path[1]
-                    ghost.set_RC(next_pos[0], next_pos[1])
+
+                if level == 3:
+                    new_pos = random_move(current_pos, wallPos)
+                    if new_pos:
+                        ghost.set_RC(new_pos[0], new_pos[1])
+                else:
+                    ghost_path = A_star(current_pos, pacman_pos, wallPos)
+                    if ghost_path and len(ghost_path) > 0:
+                        next_pos = ghost_path[0]
+                        ghost.set_RC(next_pos[0], next_pos[1])
+            
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
+            playerPath.pop(0)
+            isMoving = True
+        else:
+            alive = False
         
         totalStep += 1
         for food in foodList:

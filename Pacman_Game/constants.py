@@ -31,7 +31,7 @@ DOWN = 3
 # Setup screen
 WIDTH: int = 1200
 HEIGHT: int = 600
-FPS: int = 60
+FPS: int = 300
 
 MARGIN = {
     "TOP": 0, # "TOP": Xác định khoảng cách từ mép trên của cửa sổ đến khu vực chơi.

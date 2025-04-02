@@ -11,7 +11,7 @@ def DFS(start: tuple, food_positions: list, ghost_positions: list, wall_position
         (r, c), path = stack.pop()
 
         if (r, c) in food_positions:
-            return path + [(r, c)], True  # Tìm thấy thức ăn
+            return path + [(r, c)]  # Tìm thấy thức ăn
 
         next_moves = []
         for dr, dc in MOVES:
@@ -26,4 +26,4 @@ def DFS(start: tuple, food_positions: list, ghost_positions: list, wall_position
             stack.append(((nr, nc), path + [(nr, nc)]))
             visited.add((nr, nc))
 
-    return [], False  # Không tìm thấy đường đi
+    return path  # Không tìm thấy đường đi
