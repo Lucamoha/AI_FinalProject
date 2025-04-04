@@ -243,7 +243,7 @@ def main():
                     if ghost_path and len(ghost_path) > 0:
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
-            
+                            
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
         if playerPath:
@@ -254,6 +254,10 @@ def main():
             alive = False
         
         totalStep += 1
+        if (level == 5 and totalStep % 20 == 0):
+            ghostList.append(Ghost(_N // 2, _M // 2))
+
+     
         for food in foodList:
             if player.get_RC() == food.get_RC():
                 totalFood += 1
