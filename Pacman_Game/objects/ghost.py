@@ -12,6 +12,9 @@ class Ghost:
         self.y = row * SIZE_WALL + MARGIN["TOP"]
         self.count_ghost = random.randint(0, len(IMAGE_GHOST_PATH) - 1)
 
+         # Tạo thuộc tính rect
+        self.rect = pg.Rect(self.x, self.y, SIZE_WALL, SIZE_WALL)
+
     def draw(self, screen):
         image = pg.image.load(IMAGE_GHOST_PATH[self.count_ghost]).convert_alpha()
         image = pg.transform.scale(image, (SIZE_WALL, SIZE_WALL))
@@ -24,10 +27,12 @@ class Ghost:
                 break
         self.row = newRow
         self.col = newCol
+
     
     def set_rect(self):
         self.x = self.col * SIZE_WALL + MARGIN["LEFT"]
         self.y = self.row * SIZE_WALL + MARGIN["TOP"]
+        self.update_rect()  # Cập nhật rect sau khi thay đổi vị trí
     
     def move(self):
         '''Di chuyển từng bước theo hướng'''
@@ -48,3 +53,7 @@ class Ghost:
     def reached_target(self):
         return self.x == self.col * SIZE_WALL + MARGIN["LEFT"] and \
                self.y == self.row * SIZE_WALL + MARGIN["TOP"]
+
+    def update_rect(self):
+        '''Cập nhật vị trí của rect dựa trên tọa độ x, y'''
+        self.rect.topleft = (self.x, self.y)

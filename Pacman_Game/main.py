@@ -20,6 +20,7 @@ _N = 0
 _M = 0
 wallPos = []
 foodList = []
+foodListToDraw = []  # Danh sách thức ăn cần vẽ
 ghostList = []
 
 player = Player(0, 0)
@@ -88,7 +89,7 @@ DFS = timer(DFS)
 
 
 def draw():
-    global wallPos, screen, foodList, ghostList, counter
+    global wallPos, screen, foodList, foodListToDraw, ghostList, counter, isMoving
 
     screen.fill(BLACK)
     player.draw(screen, counter)
@@ -99,15 +100,21 @@ def draw():
         pg.draw.rect(wallSurface, (0, 255, 255), (0, 0, SIZE_WALL, SIZE_WALL), 1)
         screen.blit(wallSurface, (j * SIZE_WALL + MARGIN["LEFT"], i * SIZE_WALL + MARGIN["TOP"]))
 
-    for food in foodList:
+    for food in foodListToDraw:
         food.draw(screen)
     
     for ghost in ghostList:
         ghost.draw(screen)
 
+    continueGame = checkCollision()
+    if not continueGame:
+        isMoving = False
+        showEndPage(False)
+        return
+
 
 def drawMap():
-    global isMoving, counter, ghostList, level
+    global isMoving, counter, ghostList, level, foodListToDraw
 
     if not isMoving:
         draw()
@@ -128,12 +135,11 @@ def drawMap():
             player.move()
             if level > 2:
                 for ghost in ghostList:
-                    ghost.move()
-            
-            draw()
-
-        if i % 10 == 0:
+                    ghost.move()    
             counter += 1
+            draw()
+        if i == 35:
+            foodListToDraw = foodList.copy()
 
         pg.display.flip()
         clock.tick(FPS)
@@ -192,12 +198,17 @@ def showEndPage(alive = True):
 def checkCollision():
     global ghostList, player
 
-    for ghost in ghostList:
-        if ghost.get_RC() == player.get_RC():
-            return False
-    
-    return True
+    # Lấy hình chữ nhật đại diện cho Pacman
+    player_rect = player.rect
 
+    # Kiểm tra va chạm với từng Ghost
+    for ghost in ghostList:
+        ghost_rect = ghost.rect  # Lấy hình chữ nhật đại diện cho Ghost
+        if player_rect.colliderect(ghost_rect):  # Kiểm tra va chạm
+            print("Pacman chạm Ghost!")  # Debug
+            return False  # Pacman chết
+    
+    return True  # Không có va chạm
 
 def showMenu():
     global level, map, algo, screen
@@ -210,7 +221,7 @@ def showMenu():
 
 def main():
     global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter
-    global screen, foodList, ghostList, wallPos
+    global screen, foodList, foodListToDraw, ghostList, wallPos
     
     totalStep = 0
     totalFood = 0
@@ -228,7 +239,8 @@ def main():
 
     while running:
         drawMap()
-        
+        foodListToDraw = foodList.copy() # Danh sách thức ăn trước khi xóa
+
         if not (level == 1 or level == 2):
             for ghost in ghostList:
                 current_pos = ghost.get_RC()
@@ -252,12 +264,11 @@ def main():
             isMoving = True
         else:
             alive = False
-        
+
         totalStep += 1
         if (level == 5 and totalStep % 20 == 0):
             ghostList.append(Ghost(_N // 2, _M // 2))
 
-     
         for food in foodList:
             if player.get_RC() == food.get_RC():
                 totalFood += 1
