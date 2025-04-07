@@ -35,6 +35,11 @@ pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
 clock = pg.time.Clock()
 
+pg.mixer.init()
+eatFood_Sound = pg.mixer.Sound('assets\sounds\pacman_eatfruit.wav')
+pacmanDeath_Sound = pg.mixer.Sound('assets/sounds/pacman_death.wav')
+begining_Sound = pg.mixer.Sound('assets/sounds/pacman_beginning.wav')
+win_Sound = pg.mixer.Sound('assets/sounds/pacman_intermission.wav')
 
 def initMap(fileMap):
     '''Khởi tạo map, các list đối tượng từ fileMap sau khi người dùng hoàn thành Menu'''
@@ -115,7 +120,7 @@ def draw():
 
 def drawMap():
     global isMoving, counter, ghostList, level, foodListToDraw
-
+    
     if not isMoving:
         draw()
         pg.display.flip()
@@ -161,7 +166,11 @@ def showEndPage(alive = True):
     print(f"Time: {totalTime}s")
     print('-' * len(title))
 
-    btContinue = Button(300, HEIGHT // 2 + 150, 200, 60, screen, "Continue", showMenu)
+    def stop_music_and_show_menu():
+        pg.mixer.stop()  # Dừng tất cả âm thanh đang phát
+        showMenu()
+    
+    btContinue = Button(300, HEIGHT // 2 + 150, 200, 60, screen, "Continue", stop_music_and_show_menu)
     btExit = Button(WIDTH - 300 - 200, HEIGHT // 2 + 150, 200, 60, screen, "Exit", lambda: (pg.quit(), sys.exit()))
 
     screen.fill(BLACK)
@@ -228,7 +237,7 @@ def main():
     running = True
     alive = True
     counter = 0
-
+    
     if algo == "BFS":
         algoFunc = BFS
     elif algo == "DFS":
@@ -237,6 +246,13 @@ def main():
     if level == 1 or level == 2:
         playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
 
+    # Tạm ngưng trước khi bắt đầu
+    foodListToDraw = foodList.copy()
+    draw()
+    pg.display.flip()
+    begining_Sound.play()
+    time.sleep(4)
+    
     while running:
         drawMap()
         foodListToDraw = foodList.copy() # Danh sách thức ăn trước khi xóa
@@ -272,10 +288,14 @@ def main():
         for food in foodList:
             if player.get_RC() == food.get_RC():
                 totalFood += 1
+                eatFood_Sound.play()
                 foodList.remove(food)
                 break
         
         if not alive or not foodList:
+            if alive and not foodList:
+                win_Sound.play()
+            pacmanDeath_Sound.play()
             showEndPage(alive)
             break
     
