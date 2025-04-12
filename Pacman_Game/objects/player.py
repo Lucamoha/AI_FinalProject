@@ -2,7 +2,7 @@ import pygame as pg
 from constants import *
 
 class Player:
-    def __init__(self, row: int, col: int):
+    def __init__(self, row: int, col: int, preRow: int = 0, preCol: int = 0):
         self.image_list = IMAGE_PLAYER
         self.image = self.image_list[0]
         self.rect = self.image.get_rect()
@@ -14,8 +14,14 @@ class Player:
         self.col = col
         self.direction = RIGHT  # Hướng mặc định
 
+        self.preRow = preRow  # Hàng trước đó
+        self.preCol = preCol  # Cột trước đó
+
     def set_RC(self, row: int, col: int):
         '''Cập nhật vị trí theo ô lưới'''
+        self.preRow = self.row
+        self.preCol = self.col
+
         for i in range(len(MOVES)):
             if self.row + MOVES[i][0] == row and self.col + MOVES[i][1] == col:
                 self.direction = i
@@ -24,12 +30,19 @@ class Player:
         self.col = col
     
     def set_rect(self):
+        '''Cập nhật vị trí hình ảnh'''
         self.rect.top = self.row * SIZE_WALL + MARGIN["TOP"]
         self.rect.left = self.col * SIZE_WALL + MARGIN["LEFT"]
 
+    def get_rect(self):
+        return self.rect
+
     def get_RC(self):
         return self.row, self.col
-
+    
+    def get_pre_RC(self):
+        return self.preRow, self.preCol
+    
     def draw(self, screen: pg.Surface, counter: int):
         '''Vẽ nhân vật theo hướng hiện tại'''
         if self.direction == RIGHT: 
