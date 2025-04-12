@@ -36,7 +36,7 @@ screen = pg.display.set_mode((WIDTH, HEIGHT))
 clock = pg.time.Clock()
 
 pg.mixer.init()
-eatFood_Sound = pg.mixer.Sound('assets\sounds\pacman_eatfruit.wav')
+eatFood_Sound = pg.mixer.Sound('assets/sounds/pacman_eatfruit.wav')
 pacmanDeath_Sound = pg.mixer.Sound('assets/sounds/pacman_death.wav')
 begining_Sound = pg.mixer.Sound('assets/sounds/pacman_beginning.wav')
 win_Sound = pg.mixer.Sound('assets/sounds/pacman_intermission.wav')
@@ -285,10 +285,8 @@ def main():
                 foodList.remove(food)
                 break
         
-        if not alive or not foodList:
-            if alive and not foodList:
-                win_Sound.play()
-            pacmanDeath_Sound.play()
+        if alive and not foodList:
+            win_Sound.play()
             showEndPage(alive)
             break
     
