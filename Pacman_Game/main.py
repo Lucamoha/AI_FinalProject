@@ -95,7 +95,6 @@ DFS = timer(DFS)
 
 def draw():
     global wallPos, screen, foodList, foodListToDraw, ghostList, counter, isMoving
-
     screen.fill(BLACK)
     player.draw(screen, counter)
 
@@ -111,16 +110,9 @@ def draw():
     for ghost in ghostList:
         ghost.draw(screen)
 
-    continueGame = checkCollision()
-    if not continueGame:
-        isMoving = False
-        showEndPage(False)
-        return
-
 
 def drawMap():
     global isMoving, counter, ghostList, level, foodListToDraw
-    
     if not isMoving:
         draw()
         pg.display.flip()
@@ -152,6 +144,13 @@ def drawMap():
     
     for ghost in ghostList:
         ghost.set_rect()
+
+    continueGame = checkCollision()
+    if not continueGame:    
+        alive = False
+        pacmanDeath_Sound.play()
+        showEndPage(alive)
+
     isMoving = False 
 
 
@@ -202,22 +201,16 @@ def showEndPage(alive = True):
         btExit.animation()
 
         pg.display.flip()
-
-
+    
 def checkCollision():
     global ghostList, player
-
-    # Lấy hình chữ nhật đại diện cho Pacman
-    player_rect = player.rect
-
     # Kiểm tra va chạm với từng Ghost
     for ghost in ghostList:
-        ghost_rect = ghost.rect  # Lấy hình chữ nhật đại diện cho Ghost
-        if player_rect.colliderect(ghost_rect):  # Kiểm tra va chạm
+        if ghost.get_RC() == player.get_RC() or (player.get_pre_RC() == ghost.get_RC() and player.get_RC() == ghost.get_pre_RC()):
             print("Pacman chạm Ghost!")  # Debug
             return False  # Pacman chết
     
-    return True  # Không có va chạm
+    return True 
 
 def showMenu():
     global level, map, algo, screen
