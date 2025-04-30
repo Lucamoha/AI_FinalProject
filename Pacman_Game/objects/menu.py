@@ -74,7 +74,8 @@ class Menu:
         self.btChooseAlgo = Button(WIDTH // 2 - 150, HEIGHT - 40 - 60, 300, 70, screen, "Choose Algorithm", self._nextPage)
 
         self.btBFS = Button(WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "BFS", self._BFS)
-        self.btDFS = Button(2 * WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "DFS", self._DFS)
+        #self.btDFS = Button(2 * WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "DFS", self._DFS)
+        self.btPlayer = Button(2 * WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "PLAYER", self._player)
     
     def _backPage(self):
         if self.clicked:
@@ -204,9 +205,15 @@ class Menu:
         self.Algo = "BFS"
         self.isDone = True
     
-    def _DFS(self):
-        self.Algo = "DFS"
-        self.isDone = True
+    #def _DFS(self):
+    #    self.Algo = "DFS"
+    #    self.isDone = True
+
+    def _player(self):
+        if self.clicked:
+            self.Algo = "Manual"
+            self.isDone = True
+        self.clicked = False
 
     def main(self):
         while not self.isDone:
@@ -241,7 +248,8 @@ class Menu:
                 self.screen.blit(background, (0, 0))
                 self.btBack.animation()
                 self.btBFS.animation()
-                self.btDFS.animation()
+                #self.btDFS.animation()
+                self.btPlayer.animation()
             
             pg.display.flip()
 
