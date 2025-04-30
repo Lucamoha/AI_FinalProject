@@ -13,14 +13,14 @@ from Algorithms.Ghost_move import A_star, random_move
 
 
 level = 1
-map = 1     # STT map
+map = 1    
 algo = ""
 
 _N = 0
 _M = 0
 wallPos = []
 foodList = []
-foodListToDraw = []  # Danh sách thức ăn cần vẽ
+foodListToDraw = []  
 ghostList = []
 
 player = Player(0, 0)
@@ -29,6 +29,9 @@ totalFood = 0
 counter = 0
 totalTime = 0
 isMoving = False
+
+# Biến toàn cục để lưu trữ hướng hiện tại
+current_direction = RIGHT  # Hướng mặc định
 
 
 pg.init()
@@ -112,12 +115,43 @@ def draw():
 
 
 def drawMap():
-    global isMoving, counter, ghostList, level, foodListToDraw
+    global isMoving, counter, ghostList, level, foodListToDraw, current_direction, playerPath, algo, isStarted
     if not isMoving:
         draw()
         pg.display.flip()
-        return
-    
+        if algo != "Manual":
+            return
+            
+
+    # Nếu là chế độ tự chơi cho ghost di chuyển kể cả khi pacman không di chuyển
+    if algo == "Manual" and not isMoving:
+        i = 1
+        all_ghost_reached_target = False
+        while not all_ghost_reached_target:
+            all_ghost_reached_target = True
+            for ghost in ghostList:
+                if not ghost.reached_target():
+                    all_ghost_reached_target = False
+                    break
+                
+            if i % 5 == 0:
+                if level > 2:
+                    for ghost in ghostList:
+                        ghost.move()
+                draw()
+            pg.display.flip()
+            clock.tick(FPS)
+            i += 1
+
+        for ghost in ghostList:
+            ghost.set_rect()
+
+        continueGame = checkCollision()
+        if not continueGame:    
+            alive = False
+            pacmanDeath_Sound.play()
+            showEndPage(alive)
+                
     i = 1
     while not player.reached_target():
         for event in pg.event.get():
@@ -127,7 +161,21 @@ def drawMap():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     return showMenu()
-
+                # Thêm xử lý thay đổi hướng trong quá trình di chuyển
+                elif event.key in [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT]:
+                    # Cập nhật hướng mới
+                    if event.key == pg.K_UP:
+                        new_direction = UP
+                    elif event.key == pg.K_DOWN:
+                        new_direction = DOWN
+                    elif event.key == pg.K_LEFT:
+                        new_direction = LEFT
+                    elif event.key == pg.K_RIGHT:
+                        new_direction = RIGHT
+                    
+                    # Lưu hướng mới
+                    current_direction = new_direction
+                              
         if i % 5 == 0:
             player.move()
             if level > 2:
@@ -142,6 +190,30 @@ def drawMap():
         clock.tick(FPS)
         i += 1
     
+
+    # Khi đã đến ô đích, kiểm tra có thể đi tiếp theo hướng hiện tại không ở chế độ tự chơi
+    if algo == "Manual" and isStarted:
+        row, col = player.get_RC()
+        next_row, next_col = row, col
+        
+        if current_direction == UP:
+            next_row = row - 1
+        elif current_direction == DOWN:
+            next_row = row + 1
+        elif current_direction == LEFT:
+            next_col = col - 1
+        elif current_direction == RIGHT:
+            next_col = col + 1
+        
+        # Cập nhật hướng cho player
+        player.direction = current_direction
+        
+        # Nếu có thể di chuyển theo hướng hiện tại (không có tường) thì thêm vào playerPath
+        if (next_row, next_col) not in wallPos and 0 <= next_row < _N and 0 <= next_col < _M:
+            playerPath = [(next_row, next_col)]
+        else:
+            playerPath = []
+    
     for ghost in ghostList:
         ghost.set_rect()
 
@@ -152,7 +224,6 @@ def drawMap():
         showEndPage(alive)
 
     isMoving = False 
-
 
 def showEndPage(alive = True):
     global screen, level, map, algo, totalStep, totalFood, totalTime
@@ -181,12 +252,6 @@ def showEndPage(alive = True):
     shadowSurface = pg.font.SysFont('Arial', 100, bold=True).render(f"{'LOSE' if not alive else 'WIN'}", True, BLACK)
     screen.blit(shadowSurface, (WIDTH // 2 - textWidth // 2 + 2, 52))
     screen.blit(StatusTextSurface, (WIDTH // 2 - textWidth // 2, 50))
-
-    ScoreTextSurface = pg.font.SysFont('Arial', 60, bold=True).render(f"Score: {totalStep * (-1) + totalFood * 10}", True, RED)
-    textWidth = ScoreTextSurface.get_size()[0]
-    ScoreTextSurfaceShadow = pg.font.SysFont('Arial', 60, bold=True).render(f"Score: {totalStep * (-1) + totalFood * 10}", True, BLACK)
-    screen.blit(ScoreTextSurfaceShadow, (WIDTH // 2 - textWidth // 2 + 2, 252))
-    screen.blit(ScoreTextSurface, (WIDTH // 2 - textWidth // 2, 250))
 
 
     while True:
@@ -220,10 +285,11 @@ def showMenu():
     initMap(f"levels/Level{level}/map{map}.txt")
     main()
 
+isStarted = False # Kiểm tra xem đã bắt đầu chưa
 
 def main():
-    global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter
-    global screen, foodList, foodListToDraw, ghostList, wallPos
+    global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter, isStarted
+    global screen, foodList, foodListToDraw, ghostList, wallPos, playerPath, current_direction
     
     totalStep = 0
     totalFood = 0
@@ -233,11 +299,11 @@ def main():
     
     if algo == "BFS":
         algoFunc = BFS
-    elif algo == "DFS":
-        algoFunc = DFS
+    elif algo == "Manual":
+        algoFunc = None
 
-    if level == 1 or level == 2:
-        playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+    playerPath = []
+
 
     # Tạm ngưng trước khi bắt đầu
     foodListToDraw = foodList.copy()
@@ -245,10 +311,57 @@ def main():
     pg.display.flip()
     begining_Sound.play()
     time.sleep(4)
+
+    if algo != "Manual" and (level == 1 or level == 2):
+        playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
     while running:
         drawMap()
         foodListToDraw = foodList.copy() # Danh sách thức ăn trước khi xóa
+
+        # Xử lý chế độ tự chơi
+        if algo == "Manual":
+            # Xử lý sự kiện phím chỉ khi không di chuyển
+            if not isMoving:
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        sys.exit()
+                    if event.type == pg.KEYDOWN:
+                        if event.key in [pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT]:
+                            isStarted = True  # Đánh dấu đã bắt đầu di chuyển
+
+                            # Lưu hướng mới khi người chơi nhấn phím
+                            if event.key == pg.K_UP:
+                                current_direction = UP
+                            elif event.key == pg.K_DOWN:
+                                current_direction = DOWN
+                            elif event.key == pg.K_LEFT:
+                                current_direction = LEFT
+                            elif event.key == pg.K_RIGHT:
+                                current_direction = RIGHT
+                            elif event.key == pg.K_ESCAPE:
+                                return showMenu()
+
+                row, col = player.get_RC()
+                next_row, next_col = row, col
+                
+                # Tính toán vị trí tiếp theo dựa trên hướng hiện tại
+                if current_direction == UP:
+                    next_row = row - 1
+                elif current_direction == DOWN:
+                    next_row = row + 1
+                elif current_direction == LEFT:
+                    next_col = col - 1
+                elif current_direction == RIGHT:
+                    next_col = col + 1
+                
+                if isStarted:
+                    # Nếu đã bắt đầu di chuyển, kiểm tra xem có thể đi tiếp theo hướng hiện tại không
+                    if (next_row, next_col) not in wallPos and 0 <= next_row < _N and 0 <= next_col < _M:
+                        playerPath = [(next_row, next_col)]
+                    else:
+                        playerPath = []
 
         if not (level == 1 or level == 2):
             for ghost in ghostList:
@@ -264,14 +377,15 @@ def main():
                     if ghost_path and len(ghost_path) > 0:
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
-                            
+
+        if algo != "Manual":
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
             playerPath.pop(0)
             isMoving = True
-        else:
+        elif algo != "Manual" and not playerPath:
             alive = False
 
         totalStep += 1
