@@ -378,8 +378,8 @@ def main():
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
 
-        if algo != "Manual":
-            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+            if algo != "Manual":
+                playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
