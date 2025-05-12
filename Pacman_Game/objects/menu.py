@@ -73,9 +73,13 @@ class Menu:
         self.btNextMap = Button(WIDTH - 100 - 40, HEIGHT - 40 - 50, 100, 50, screen, ">", self._nextMap)
         self.btChooseAlgo = Button(WIDTH // 2 - 150, HEIGHT - 40 - 60, 300, 70, screen, "Choose Algorithm", self._nextPage)
 
-        self.btBFS = Button(WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "BFS", self._BFS)
-        #self.btDFS = Button(2 * WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "DFS", self._DFS)
-        self.btPlayer = Button(2 * WIDTH // 3 - 75, HEIGHT - 350, 150, 70, screen, "PLAYER", self._player)
+        self.btBFS = Button(75, 180, 300, 70, screen, "BFS", self._BFS)
+        self.btBeamSearch = Button(450, 180, 300, 70, screen, "BeamSearch", self._BeamSearch)
+        self.btBacktracking = Button(825, 180, 300, 70, screen, "BackTracking", self._Backtracking)
+        self.btPartial_Observation = Button(75, 290, 300, 70, screen, "Partial Observation", self._Partial_Observation)
+        self.btQLearning = Button(450, 290, 300, 70, screen, "Q-Learning", self._QLearning)
+        self.btA_Star = Button(825, 290, 300, 70, screen, "A_Star", self._A_Star)
+        self.btPlayer = Button(450, 400, 300, 70, screen, "PLAYER", self._player)
     
     def _backPage(self):
         if self.clicked:
@@ -202,15 +206,43 @@ class Menu:
         self.clicked = False
     
     def _BFS(self):
-        self.Algo = "BFS"
-        self.isDone = True
+        if self.clicked:    
+            self.Algo = "BFS"
+            self.isDone = True
+        self.clicked = False
     
-    #def _DFS(self):
-    #    self.Algo = "DFS"
-    #    self.isDone = True
+    def _BeamSearch(self):
+        if self.clicked:    
+            self.Algo = "BeamSearch"
+            self.isDone = True
+        self.clicked = False
+    
+    def _Backtracking(self):
+        if self.clicked:    
+            self.Algo = "Backtracking"
+            self.isDone = True
+        self.clicked = False
+
+    def _Partial_Observation(self):
+        if self.clicked:    
+            self.Algo = "Partial_Observation"
+            self.isDone = True
+        self.clicked = False
+
+    def _QLearning(self):
+        if self.clicked:    
+            self.Algo = "QLearning"
+            self.isDone = True
+        self.clicked = False
+
+    def _A_Star(self):
+        if self.clicked:    
+            self.Algo = "A_Star"
+            self.isDone = True
+        self.clicked = False
 
     def _player(self):
-        if self.clicked:
+        if self.clicked:    
             self.Algo = "Manual"
             self.isDone = True
         self.clicked = False
@@ -248,7 +280,11 @@ class Menu:
                 self.screen.blit(background, (0, 0))
                 self.btBack.animation()
                 self.btBFS.animation()
-                #self.btDFS.animation()
+                self.btBeamSearch.animation()
+                self.btBacktracking.animation()
+                self.btPartial_Observation.animation()
+                self.btQLearning.animation()
+                self.btA_Star.animation()
                 self.btPlayer.animation()
             
             pg.display.flip()
