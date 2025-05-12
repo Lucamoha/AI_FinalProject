@@ -3,7 +3,7 @@ import heapq
 import random
 from Algorithms.utils import manhattan
 
-def A_star(start: tuple, pacman_position: tuple, wall_positions: list):
+def A_star_for_ghost(start: tuple, pacman_position: tuple, wall_positions: list):
     """A* giúp ghost tìm đường đi ngắn nhất đến Pacman"""
     if not pacman_position:
         return []
@@ -36,7 +36,7 @@ def A_star(start: tuple, pacman_position: tuple, wall_positions: list):
     return []  # Không tìm thấy đường đi
 
 
-def random_move(start: tuple, wall_positions: list):
+def random_move_for_ghost(start: tuple, wall_positions: list):
     """Ghost di chuyển ngẫu nhiên theo 4 hướng"""
     row, col = start 
 
