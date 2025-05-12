@@ -9,7 +9,7 @@
 5. [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 6. [Cách chạy trò chơi](#cách-chạy-trò-chơi)
 7. [Các thành viên nhóm](#thành-viên-nhóm)
-8. [Các thuật toán được sử dụng trong trò chơi](#các-thuật-toán-được-sử-dụng-trong-trò-chơi)
+8. [Các thuật toán được sử dụng trong trò chơi](#-các-thuật-toán-được-sử-dụng-trong-trò-chơi)
 
 ## 🧠 Giới thiệu tổng quan về dự án
 
@@ -65,12 +65,12 @@ python main.py
 * [Nguyễn Văn Kế - 23110234](https://github.com/nvk3005)
 
 ## 📊 Các thuật toán được sử dụng trong trò chơi
-[I. Uninformed Search - BFS]
-[II. Informed Search - A*]
-[III. Local Search - Local Beam Search]
-[IV. Searching with Nondeterminism: Searching with Partially Observation]
-[V. Constraint Satisfaction: Backtracking]
-[VI. Reinforcement Learning: Q-Learning]
+[I. Uninformed Search - BFS](#i-uninformed-search---bfs)
+[II. Informed Search - A*](#ii-informed-search---a)
+[III. Local Search - Local Beam Search](#iii-local-search---local-beam-search)
+[IV. Searching with Nondeterminism: Searching with Partially Observation](#iv-searching-with-nondeterminism-searching-with-partially-observation)
+[V. Constraint Satisfaction: Backtracking](#v-constraint-satisfaction-backtracking)
+[VI. Reinforcement Learning: Q-Learning](#vi-reinforcement-learning-q-learning)
 
 ### I. Uninformed Search - BFS
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
@@ -89,7 +89,9 @@ python main.py
 | :--- | :---|
 
 ### V. Constraint Satisfaction: Backtracking
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
 
 ### VI. Reinforcement Learning: Q-Learning
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
