@@ -8,8 +8,12 @@ from objects.food import Food
 from objects.player import Player
 from objects.ghost import Ghost
 from Algorithms.BFS import BFS
-from Algorithms.DFS import DFS
-from Algorithms.Ghost_move import A_star, random_move
+from Algorithms.BeamSearch import BeamSearch
+from Algorithms.Backtracking import Backtracking
+from Algorithms.A_Star import A_Star
+from Algorithms.Partial_Observation import Partial_Observation
+from Algorithms.Q_Learning import QLearning
+from Algorithms.Ghost_move import A_star_for_ghost, random_move_for_ghost
 
 
 level = 1
@@ -93,8 +97,11 @@ def timer(func):
         return result
     return wrapper
 BFS = timer(BFS)
-DFS = timer(DFS)
-
+BeamSearch = timer(BeamSearch)
+Backtracking = timer(Backtracking)
+A_Star = timer(A_Star)
+Partial_Observation = timer(Partial_Observation)
+QLearning = timer(QLearning)
 
 def draw():
     global wallPos, screen, foodList, foodListToDraw, ghostList, counter, isMoving
@@ -175,7 +182,7 @@ def drawMap():
                     
                     # Lưu hướng mới
                     current_direction = new_direction
-                              
+
         if i % 5 == 0:
             player.move()
             if level > 2:
@@ -299,7 +306,17 @@ def main():
     
     if algo == "BFS":
         algoFunc = BFS
-    elif algo == "Manual":
+    elif algo == "BeamSearch":
+        algoFunc = BeamSearch
+    elif algo == "Backtracking":
+        algoFunc = Backtracking
+    elif algo == "Partial_Observation":
+        algoFunc = Partial_Observation
+    elif algo == "QLearning":
+        algoFunc = QLearning
+    elif algo == "A_Star":
+        algoFunc = A_Star
+    else: # Manual
         algoFunc = None
 
     playerPath = []
@@ -313,7 +330,10 @@ def main():
     time.sleep(4)
 
     if algo != "Manual" and (level == 1 or level == 2):
-        playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+        if algo == "QLearning":
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
+        else:
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
     while running:
         drawMap()
@@ -369,23 +389,26 @@ def main():
                 pacman_pos = player.get_RC()
 
                 if level == 3:
-                    new_pos = random_move(current_pos, wallPos)
+                    new_pos = random_move_for_ghost(current_pos, wallPos)
                     if new_pos:
                         ghost.set_RC(new_pos[0], new_pos[1])
                 else:
-                    ghost_path = A_star(current_pos, pacman_pos, wallPos)
+                    ghost_path = A_star_for_ghost(current_pos, pacman_pos, wallPos)
                     if ghost_path and len(ghost_path) > 0:
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
 
-        if algo != "Manual":
-            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
-    
+            if algo != "Manual":
+                if algo == "QLearning":
+                    playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
+                else:
+                    playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+            
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
             playerPath.pop(0)
             isMoving = True
-        elif algo != "Manual" and not playerPath:
+        elif algo != "Manual" or not playerPath:
             alive = False
 
         totalStep += 1
