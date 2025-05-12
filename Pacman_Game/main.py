@@ -295,7 +295,7 @@ def showMenu():
 isStarted = False # Kiểm tra xem đã bắt đầu chưa
 
 def main():
-    global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter, isStarted
+    global level, map, algo, totalStep, totalFood, totalTime, isMoving, counter, isStarted, _N, _M
     global screen, foodList, foodListToDraw, ghostList, wallPos, playerPath, current_direction
     
     totalStep = 0
@@ -332,6 +332,8 @@ def main():
     if algo != "Manual" and (level == 1 or level == 2):
         if algo == "QLearning":
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
+        elif algo == "Partial_Observation":
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, _N, _M)
         else:
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
     
@@ -398,12 +400,15 @@ def main():
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
 
-            if algo != "Manual":
+            if algo != "Manual" and algo != "Partial_Observation":
                 if algo == "QLearning":
                     playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
                 else:
                     playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
-            
+        
+        if algo == "Partial_Observation":
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, _N, _M)
+
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
             playerPath.pop(0)
