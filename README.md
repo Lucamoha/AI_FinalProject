@@ -32,7 +32,7 @@ Người chơi điều khiển nhân vật **Pacman** với nhiệm vụ:
 | **2** | Có quái vật (không di chuyển), có 1 thức ăn.                                          |
 | **3** | Có quái vật di chuyển **ngẫu nhiên**, có **nhiều thức ăn**.                           |
 | **4** | Quái vật di chuyển theo thuật toán **A\*** để đuổi theo Pacman, có **nhiều thức ăn**. |
-| **5** | Giống level 4 nhưng **mỗi 20 bước** sẽ có thêm **1 quái vật mới**, có nhiều thức ăn.  |
+| **5** | Giống level 4 nhưng **mỗi 20 bước** sẽ có thêm **1 quái vật mới**.  |
 
 ## 🧮 Cách tính điểm
 
@@ -51,9 +51,10 @@ Người chơi điều khiển nhân vật **Pacman** với nhiệm vụ:
 ```bash
 # Clone repo từ github
 git clone https://github.com/Lucamoha/AI_FinalProject.git
+cd AI_FinalProject/Pacman_Game
 
-# Cài đặt thư viện Pygame
-pip install pygame
+# Cài đặt thư viện cần thiết
+pip install -r requirements.txt
 
 # Chạy game
 python main.py
