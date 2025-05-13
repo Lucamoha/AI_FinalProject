@@ -85,7 +85,6 @@ def initMap(fileMap):
     player.set_RC(player_X, player_Y)
     player.set_rect()
 
-
 def timer(func):
     def wrapper(*args, **kwargs):
         global totalTime
@@ -156,7 +155,6 @@ def drawMap():
         continueGame = checkCollision()
         if not continueGame:    
             alive = False
-            pacmanDeath_Sound.play()
             showEndPage(alive)
                 
     i = 1
@@ -227,12 +225,16 @@ def drawMap():
     continueGame = checkCollision()
     if not continueGame:    
         alive = False
-        pacmanDeath_Sound.play()
         showEndPage(alive)
 
     isMoving = False 
 
 def showEndPage(alive = True):
+    if alive:
+        win_Sound.play()
+    else:
+        pacmanDeath_Sound.play()
+
     global screen, level, map, algo, totalStep, totalFood, totalTime
     title = f"--Level: {level} - Map: {map} - Algo: {algo}--"
     print(title)
@@ -260,7 +262,6 @@ def showEndPage(alive = True):
     screen.blit(shadowSurface, (WIDTH // 2 - textWidth // 2 + 2, 52))
     screen.blit(StatusTextSurface, (WIDTH // 2 - textWidth // 2, 50))
 
-
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -271,9 +272,8 @@ def showEndPage(alive = True):
             return
         
         btExit.animation()
-
         pg.display.flip()
-    
+
 def checkCollision():
     global ghostList, player
     # Kiểm tra va chạm với từng Ghost
@@ -329,7 +329,7 @@ def main():
     begining_Sound.play()
     time.sleep(4)
 
-    if algo != "Manual" and (level == 1 or level == 2):
+    if algo != "Manual":
         if algo == "QLearning":
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
         elif algo == "Partial_Observation":
@@ -400,25 +400,24 @@ def main():
                         next_pos = ghost_path[0]
                         ghost.set_RC(next_pos[0], next_pos[1])
 
-            if algo != "Manual" and algo != "Partial_Observation":
-                if algo == "QLearning":
-                    playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
-                else:
-                    playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
+            if algo != "Manual" and algo != "Partial_Observation" and algo != "QLearning":
+                playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos)
         
         if algo == "Partial_Observation":
             playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, _N, _M)
+        elif algo == "QLearning":
+            playerPath = algoFunc(player.get_RC(), [food.get_RC() for food in foodList], [ghost.get_RC() for ghost in ghostList], wallPos, map=map, level=level)
 
         if playerPath:
             player.set_RC(playerPath[0][0], playerPath[0][1])
             playerPath.pop(0)
             isMoving = True
-        elif algo != "Manual" or not playerPath:
-            alive = False
 
-        totalStep += 1
-        if (level == 5 and totalStep % 20 == 0):
-            ghostList.append(Ghost(_N // 2, _M // 2))
+            totalStep += 1
+            if (level == 5 and totalStep % 20 == 0):
+                ghostList.append(Ghost(_N // 2, _M // 2))
+        elif algo != "Manual" and not playerPath:
+            alive = False
 
         for food in foodList:
             if player.get_RC() == food.get_RC():
@@ -427,8 +426,7 @@ def main():
                 foodList.remove(food)
                 break
         
-        if alive and not foodList:
-            win_Sound.play()
+        if not alive or not foodList:
             showEndPage(alive)
             break
     
