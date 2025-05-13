@@ -2,13 +2,13 @@
 
 ## 📑 Bảng nội dung
 
-1. [Giới thiệu tổng quan về trò chơi](#giới-thiệu-tổng-quan-về-dự-án)
-2. [Mục tiêu của trò chơi](#mục-tiêu-của-trò-chơi)
-3. [Các cấp độ (levels)](#các-cấp-độ-levels)
-4. [Cách tính điểm](#cách-tính-điểm)
-5. [Công nghệ sử dụng](#công-nghệ-sử-dụng)
-6. [Cách chạy trò chơi](#cách-chạy-trò-chơi)
-7. [Các thành viên nhóm](#thành-viên-nhóm)
+1. [Giới thiệu tổng quan về trò chơi](#-giới-thiệu-tổng-quan-về-dự-án)
+2. [Mục tiêu của trò chơi](#-mục-tiêu-của-trò-chơi)
+3. [Các cấp độ (levels)](#%EF%B8%8F-các-cấp-độ-levels)
+4. [Cách tính điểm](#-cách-tính-điểm)
+5. [Công nghệ sử dụng](#%EF%B8%8F-công-nghệ-sử-dụng)
+6. [Cách chạy trò chơi](#-cách-chạy-trò-chơi)
+7. [Các thành viên nhóm](#-thành-viên-nhóm)
 8. [Các thuật toán được sử dụng trong trò chơi](#-các-thuật-toán-được-sử-dụng-trong-trò-chơi)
 
 ## 🧠 Giới thiệu tổng quan về dự án
@@ -75,23 +75,33 @@ python main.py
 ### I. Uninformed Search - BFS
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/ebafb3e0-5293-4ac5-b2fb-5371c3055b51)|--Level: 2 - Map: 3 - Algo: BFS--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.006007099999806087s|
+
 
 ### II. Informed Search - A*
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/ccae3290-a333-4f63-bc9b-5f835140fb14)|--Level: 2 - Map: 3 - Algo: A_Star--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.003884499999912805s|
 
 ### III. Local Search - Local Beam Search
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/8886def7-e92c-4c3f-b030-775eed8862e3)|--Level: 2 - Map: 3 - Algo: BeamSearch--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.002295499999945605s|
+
 
 ### IV. Searching with Nondeterminism: Searching with Partially Observation
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/653acd08-86f3-4a4c-b518-ba1216452521)|--Level: 2 - Map: 3 - Algo: Partial_Observation--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.03737750000027518s|
 
 ### V. Constraint Satisfaction: Backtracking
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/4e37087c-3b6e-4738-9360-9a4b580d5e95)|--Level: 2 - Map: 3 - Algo: Backtracking--<br>Status: Win<br>Steps: 29<br>Food: 1<br>Score: -19<br>Time: 0.007194500000423432s|
+
 
 ### VI. Reinforcement Learning: Q-Learning
 |Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
 | :--- | :---|
+|![Image](https://github.com/user-attachments/assets/598838e3-51cc-48c2-8171-3a34a5e7a169)|--Level: 2 - Map: 3 - Algo: QLearning--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.27460940000037226s|
+
