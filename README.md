@@ -109,23 +109,70 @@ python main.py
 
 ## 📈 So sánh hiệu suất các thuật toán
 ### So sánh hiệu suất khi áp dụng một thuật toán cho nhiều cấp độ (level)
-
-| Thuật toán                       | Minh họa kết quả                                                                          |
-|----------------------------------|-------------------------------------------------------------------------------------------|
-| **BFS**                          | ![Image](https://github.com/user-attachments/assets/0b7678c2-34a8-4119-845b-2563edcf31d8) |
-| **A\***                          | ![Image](https://github.com/user-attachments/assets/c692b62f-e190-4717-9b46-f287f1755b09) |
-| **Local Beam Search**            | ![Image](https://github.com/user-attachments/assets/62f0704f-204d-4c42-b038-e8fc8c06aaa7) |
-| **Searching with Partial Obs.**  | ![Image](https://github.com/user-attachments/assets/367d6cf3-7c0a-4602-8263-a5a2726bbcb1) |
-| **Backtracking**                 | ![Image](https://github.com/user-attachments/assets/790743eb-b6e9-4885-85ac-91e4b2d95e71) |
-| **Q-Learning**                   | ![Image](https://github.com/user-attachments/assets/7367ab27-329c-456d-bc8d-aef1cae12cf7) |
-
+<table>
+  <thead>
+    <tr>
+      <th>Thuật toán</th>
+      <th>Minh họa kết quả</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>BFS</b></td>
+      <td><img src="https://github.com/user-attachments/assets/0b7678c2-34a8-4119-845b-2563edcf31d8" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>A*</b></td>
+      <td><img src="https://github.com/user-attachments/assets/c692b62f-e190-4717-9b46-f287f1755b09" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Local Beam Search</b></td>
+      <td><img src="https://github.com/user-attachments/assets/62f0704f-204d-4c42-b038-e8fc8c06aaa7" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Partial Observation Search</b></td>
+      <td><img src="https://github.com/user-attachments/assets/367d6cf3-7c0a-4602-8263-a5a2726bbcb1" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Backtracking</b></td>
+      <td><img src="https://github.com/user-attachments/assets/790743eb-b6e9-4885-85ac-91e4b2d95e71" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Q-Learning</b></td>
+      <td><img src="https://github.com/user-attachments/assets/7367ab27-329c-456d-bc8d-aef1cae12cf7" width="400"/></td>
+    </tr>
+  </tbody>
+</table>
 
 ### So sánh hiệu suất khi áp dụng nhiều thuật toán cho một cấp độ (level) duy nhất
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>Minh họa kết quả</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Level 1</b></td>
+      <td><img src="https://github.com/user-attachments/assets/3aee6c31-641e-4857-bec9-826a8657e05a" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Level 2</b></td>
+      <td><img src="https://github.com/user-attachments/assets/a79eb3a2-52d9-4b43-9168-bceeead2c617" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Level 3</b></td>
+      <td><img src="https://github.com/user-attachments/assets/34841215-3624-433c-af0c-24ebc1f24f81" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Level 4</b></td>
+      <td><img src="https://github.com/user-attachments/assets/05c9b48c-48cf-4701-80f7-6a1ae775df5f" width="400"/></td>
+    </tr>
+    <tr>
+      <td><b>Level 5</b></td>
+      <td><img src="https://github.com/user-attachments/assets/c089c934-21d2-47da-8ec0-44d53d502ee3" width="400"/></td>
+    </tr>
+  </tbody>
+</table>
 
-| Level                            | Minh họa kết quả                                                                          |
-|----------------------------------|-------------------------------------------------------------------------------------------|
-| **Level 1**                      | ![Image](https://github.com/user-attachments/assets/3aee6c31-641e-4857-bec9-826a8657e05a) |
-| **Level 2**                      | ![Image](https://github.com/user-attachments/assets/a79eb3a2-52d9-4b43-9168-bceeead2c617) |
-| **Level 3**                      | ![Image](https://github.com/user-attachments/assets/34841215-3624-433c-af0c-24ebc1f24f81) |
-| **Level 4**                      | ![Image](https://github.com/user-attachments/assets/05c9b48c-48cf-4701-80f7-6a1ae775df5f) |
-| **Level 5**                      | ![Image](https://github.com/user-attachments/assets/c089c934-21d2-47da-8ec0-44d53d502ee3) |
