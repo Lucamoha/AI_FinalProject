@@ -75,20 +75,30 @@ python main.py
 - [VI. Reinforcement Learning: Q-Learning](#vi-reinforcement-learning-q-learning)
 
 ### I. Uninformed Search - BFS
-|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
-| :--- | :---|
-|![Image](https://github.com/user-attachments/assets/ebafb3e0-5293-4ac5-b2fb-5371c3055b51)|--Level: 2 - Map: 3 - Algo: BFS--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.006007099999806087s|
-
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|Đường đi của thuật toán|
+| :--- | :---| :---|
+|![Image](https://github.com/user-attachments/assets/3a819ad1-4cc5-4a7a-a49b-10df2549939d)|--Level: 2 - Map: 3 - Algo: BFS--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.006945200000245677s|[Đường đi của thuật toán BFS](https://raw.githubusercontent.com/Lucamoha/AI_FinalProject/refs/heads/main/Path_AStar_BFS_BeamSearch/BFS.txt)|
 
 ### II. Informed Search - A*
-|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
-| :--- | :---|
-|![Image](https://github.com/user-attachments/assets/ccae3290-a333-4f63-bc9b-5f835140fb14)|--Level: 2 - Map: 3 - Algo: A_Star--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.003884499999912805s|
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|Đường đi của thuật toán|
+| :--- | :---| :---|
+|![Image](https://github.com/user-attachments/assets/ccae3290-a333-4f63-bc9b-5f835140fb14)|--Level: 2 - Map: 3 - Algo: A_Star--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.003884499999912805s|[Đường đi của thuật toán A*](https://raw.githubusercontent.com/Lucamoha/AI_FinalProject/refs/heads/main/Path_AStar_BFS_BeamSearch/A_Star.txt)|
 
 ### III. Local Search - Local Beam Search
-|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|
-| :--- | :---|
-|![Image](https://github.com/user-attachments/assets/8886def7-e92c-4c3f-b030-775eed8862e3)|--Level: 2 - Map: 3 - Algo: BeamSearch--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.002295499999945605s|
+#### a. BeamWidth = 1
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|Đường đi của thuật toán|
+| :--- | :---| :---|
+|![Image](https://github.com/user-attachments/assets/63fa7e67-dcc6-47fa-8d4e-ff7d5ea87d14)|--Level: 2 - Map: 3 - Algo: BeamSearch--<br>Status: Win<br>Steps: 41<br>Food: 1<br>Score: -31<br>Time: 0.004805000000033033s|[Đường đi của thuật toán BeamSearch với BeamWidth = 1](https://raw.githubusercontent.com/Lucamoha/AI_FinalProject/refs/heads/main/Path_AStar_BFS_BeamSearch/BeamSearch_Width%3D1.txt)|
+
+#### b. BeamWidth = 2
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|Đường đi của thuật toán|
+| :--- | :---| :---|
+|![Image](https://github.com/user-attachments/assets/fd1ce190-0d12-41e6-8f09-9aadc2f33777)|--Level: 2 - Map: 3 - Algo: BeamSearch--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.0016415999998571351s|[Đường đi của thuật toán BeamSearch với BeamWidth = 2](https://raw.githubusercontent.com/Lucamoha/AI_FinalProject/refs/heads/main/Path_AStar_BFS_BeamSearch/BeamSearch_Width%3D2.txt)|
+
+#### b. BeamWidth = 3
+|Hình ảnh khi chạy thuật toán|Kết quả khi áp dụng thuật toán|Đường đi của thuật toán|
+| :--- | :---| :---|
+|![Image](https://github.com/user-attachments/assets/4b5e4bf9-965c-4659-9c9a-ba9a2157fb1a)|--Level: 2 - Map: 3 - Algo: BeamSearch--<br>Status: Win<br>Steps: 19<br>Food: 1<br>Score: -9<br>Time: 0.005931900000177848s|[Đường đi của thuật toán BeamSearch với BeamWidth = 3](https://raw.githubusercontent.com/Lucamoha/AI_FinalProject/refs/heads/main/Path_AStar_BFS_BeamSearch/BeamSearch_Width%3D3.txt)|
 
 
 ### IV. Searching with Nondeterminism: Searching with Partially Observation
